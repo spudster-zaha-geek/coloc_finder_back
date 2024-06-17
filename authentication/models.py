@@ -5,6 +5,9 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 from django.apps import apps
 from django.contrib.auth.hashers import make_password
+import jwt
+from datetime import datetime, timedelta
+from django.conf import settings
 
 class CustomUserManager(UserManager):
     def _create_user(self, email, password, **extra_fields):
@@ -74,10 +77,8 @@ class User(AbstractBaseUser, PermissionsMixin, TrackingModel):
     
     objects = CustomUserManager()
     
-    def __str__(self):
-        return self.email
-    
     @property
     def token(self):
-        return ''
+        token = jwt.encode({'email': self.email, 'exp': datetime.utcnow() + timedelta(hours=24)}, settings.SECRET_KEY, algorithm='HS256')
+        return token
 
