@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-2sfz%by765uptpohdf&9-l-b*zpan42k+v58(9^%$la8uoa8u&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['coloc-finder.onrender.com']
 
 
 # Application definition
