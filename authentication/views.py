@@ -1,20 +1,37 @@
-from rest_framework.generics import GenericAPIView
-from authentication.serializers import RegisterSerializer, LoginSerializer
+from rest_framework import generics
+from authentication.serializers import RegisterSerializer, LoginSerializer, ProfileSerializer
 from rest_framework import response, status, permissions
 from django.contrib.auth import authenticate
+from django.http import QueryDict
 
 
-class AuthUserAPIView(GenericAPIView):
+class ProfileView(generics.RetrieveUpdateAPIView):
+    serializer_class = ProfileSerializer
+    permission_classes = [permissions.IsAuthenticated,]
+
+    def get_object(self):
+        return self.request.user
     
-    permission_classes = (permissions.IsAuthenticated,)
-    serializer_class = RegisterSerializer
-    
-    def get(self, request):
-        user = request.user
-        serializer = self.serializer_class(data=user)
-        return response.Response({'user': serializer.data}, status=status.HTTP_200_OK)
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        
+        print(request.content_type)
 
-class RegisterAPIView(GenericAPIView):
+        if 'multipart/form-data' in request.content_type:
+            data = request.data
+        else:
+            data = request.data.dict() if isinstance(request.data, QueryDict) else request.data
+
+        serializer = self.get_serializer(instance, data=data, partial=partial)
+        
+        if serializer.is_valid():
+            self.perform_update(serializer)
+            return response.Response(serializer.data)
+        else:
+            return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class RegisterAPIView(generics.GenericAPIView):
     
     serializer_class = RegisterSerializer
     authentication_classes = []
@@ -30,7 +47,7 @@ class RegisterAPIView(GenericAPIView):
         return response.Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
-class LoginAPIView(GenericAPIView):
+class LoginAPIView(generics.GenericAPIView):
     
     serializer_class = LoginSerializer
     authentication_classes = []

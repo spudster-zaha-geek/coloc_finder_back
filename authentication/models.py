@@ -67,7 +67,7 @@ class User(AbstractBaseUser, PermissionsMixin, TrackingModel):
     )
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
     
-    profil_picture = models.ImageField(upload_to=upload_to, default="images/Profile_avatar_placeholder_large.png", blank=True, null=True)
+    profile_picture = models.ImageField(upload_to=upload_to, default="images/Profile_avatar_placeholder_large.png", blank=True, null=True)
 
     EMAIL_FIELD = "email"
     USERNAME_FIELD = "email"

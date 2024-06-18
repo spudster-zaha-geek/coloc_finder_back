@@ -27,6 +27,7 @@ SECRET_KEY = 'django-insecure-2sfz%by765uptpohdf&9-l-b*zpan42k+v58(9^%$la8uoa8u&
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    'localhost',
     '127.0.0.1',
     'coloc-finder.onrender.com'
 ]
