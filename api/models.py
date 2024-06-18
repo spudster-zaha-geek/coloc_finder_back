@@ -13,7 +13,7 @@ class Annonce(TrackingModel):
     description = models.TextField()
     price = models.FloatField()
     location = models.CharField(max_length=255)
-    conditions_colocations = models.ManyToManyField(ConditionColocation)
+    conditions_colocations = models.ManyToManyField(ConditionColocation, null=True, blank=True, related_name='annonces')
     owner = models.ForeignKey(to=User, on_delete=models.CASCADE)
     
     def __str__(self) -> str:
@@ -21,5 +21,5 @@ class Annonce(TrackingModel):
     
 class AnnonceImage(models.Model):
     image = models.ImageField(upload_to=upload_to, blank=False, null=False)
-    annonce = models.ForeignKey(to=Annonce, on_delete=models.CASCADE)
+    annonce = models.ForeignKey(to=Annonce, on_delete=models.CASCADE, related_name='images')
     
