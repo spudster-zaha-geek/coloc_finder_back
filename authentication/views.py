@@ -7,10 +7,11 @@ from django.contrib.auth import authenticate
 class AuthUserAPIView(GenericAPIView):
     
     permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = RegisterSerializer
     
     def get(self, request):
         user = request.user
-        serializer = RegisterSerializer(user)
+        serializer = self.serializer_class(data=user)
         return response.Response({'user': serializer.data}, status=status.HTTP_200_OK)
 
 class RegisterAPIView(GenericAPIView):

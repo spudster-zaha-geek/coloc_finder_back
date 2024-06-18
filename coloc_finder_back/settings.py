@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -30,14 +31,11 @@ ALLOWED_HOSTS = [
     'coloc-finder.onrender.com'
 ]
 
-AUTH_USER_MODEL = "authentication.User"
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    'api',
-    'authentication',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,6 +45,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     'rest_framework',
     "corsheaders",
+    'authentication',
+    'api',
 ]
 
 MIDDLEWARE = [
@@ -61,6 +61,7 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
 ]
+AUTH_USER_MODEL = "authentication.User"
 
 ROOT_URLCONF = 'coloc_finder_back.urls'
 
@@ -130,6 +131,12 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Actual directory user files go to
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'mediafiles')
+
+# URL used to access the media
+MEDIA_URL = '/media/'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
@@ -137,7 +144,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # This production code might break development mode, so we check whether we're in DEBUG mode
 if not DEBUG:
-    import os
     # Tell Django to copy static assets into a path called `staticfiles` (this is specific to Render)
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     # Enable the WhiteNoise storage backend, which compresses static files to reduce disk use
