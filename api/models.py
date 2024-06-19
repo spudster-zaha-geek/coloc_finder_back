@@ -6,7 +6,10 @@ def upload_to(instance, filename):
     return 'images/{filename}'.format(filename=filename)
 
 class ConditionColocation(models.Model):
-    condition = models.TextField()  
+    condition = models.TextField()
+    
+    def __str__(self) -> str:
+        return self.condition
     
 class Annonce(TrackingModel):
     title = models.CharField(max_length=255)

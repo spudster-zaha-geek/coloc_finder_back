@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from api.models import Annonce, AnnonceImage, ConditionColocation
+
+admin.site.register(Annonce)
+admin.site.register(ConditionColocation)
+admin.site.register(AnnonceImage)

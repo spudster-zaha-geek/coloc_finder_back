@@ -1,4 +1,4 @@
-from rest_framework.generics import ListAPIView, CreateAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateDestroyAPIView
 from api.serializers import AnnonceSerializer, ConditionColocationSerializer
 from rest_framework.permissions import IsAuthenticated
 from api.models import ConditionColocation, Annonce
@@ -27,3 +27,12 @@ class ListConditionColocationView(ListAPIView):
     
     def get_queryset(self):  
         return ConditionColocation.objects.all()
+    
+
+class AnnoceDetailsView(RetrieveUpdateDestroyAPIView):
+    serializer_class = AnnonceSerializer
+    permission_classes = (IsAuthenticated,)
+    lookup_field = "id"
+    
+    def get_queryset(self):  
+        return Annonce.objects.filter(owner=self.request.user)
